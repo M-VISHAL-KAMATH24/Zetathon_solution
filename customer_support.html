@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-color: #4CAF50; /* Green */
+            --secondary-color: #007bff;
+            --background-color: #121212; /* Dark background */
+            --text-color: #ffffff; /* White text for contrast */
+            --white: #ffffff;
+            --border-color: #333; /* Darker borders */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Layout */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: var(--background-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+        }
+
+        /* Contact Form */
+        #contact-form {
+            background-color: #1E1E1E;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        #contact-form:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        #contact-form h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            background-color: #333;
+            color: var(--text-color);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        /* FAQ Section */
+        #faq {
+            background-color: #1E1E1E;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+        }
+
+        .faq-question {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .faq-question:hover {
+            background-color: #444;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px;
+            background-color: #444;
+            border-radius: 0 0 5px 5px;
+        }
+
+        /* Chatbot Styles */
+        #chatbot-container {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: #1E2A38;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+        }
+
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) #1E2A38;
+        }
+
+        #chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chat-messages::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        #user-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #394855;
+            align-items: center;
+            background-color: #1A2634;
+        }
+
+        #user-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid var(--primary-color);
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 14px;
+            background-color: #243B55;
+            color: var(--white);
+        }
+
+        #chatbot-header {
+            background-color: #394855;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            border-radius: 10px 10px 0 0;
+        }
+
+        .chat-btn {
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .chat-btn:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: var(--white);
+            align-self: flex-end;
+        }
+
+        .bot-message {
+            background-color: #394855;
+            color: var(--white);
+            align-self: flex-start;
+        }
+
+        #chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease;
+        }
+
+        #chat-toggle:hover {
+            background-color: #45a049;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            #chatbot-container {
+                width: 90%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header container">
+        <h1>Customer Support</h1>
+    </div>
+
+    <div class="container">
+        <!-- Contact Form -->
+        <div id="contact-form">
+            <h2>Contact Us</h2>
+            <form action="/send-message" method="POST">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+
+        <!-- FAQ Section -->
+        <div id="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer('answer1')">
+                    <span>What is your return policy?</span>
+                    <span>+</span>
+                </div>
+                <div id="answer1" class="faq-answer">
+                    You can return items within 30 days of purchase. For more details, visit our return policy page.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer('answer2')">
+                    <span>How can I track my order?</span>
+                    <span>+</span>
+                </div>
+                <div id="answer2" class="faq-answer">
+                    Visit our 'Track Order' page and enter your order number.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle">Chat with us</button>
+
+    <!-- Chatbot Container -->
+    <div id="chatbot-container">
+        <div id="chatbot-header">Visionary Chatbox</div>
+        <div id="chat-messages"></div>
+        <div id="user-input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-btn" class="chat-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // FAQ Toggle Function
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            const faqItem = answer.closest('.faq-item');
+            const icon = faqItem.querySelector('.faq-question span:last-child');
+            
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+                icon.textContent = '+';
+            } else {
+                answer.style.display = 'block';
+                icon.textContent = '−';
+            }
+        }
+
+        // Chatbot Functionality
+        const chatToggle = document.getElementById('chat-toggle');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        const botResponses = {
+            'hi': 'Hello! How can I assist you today?',
+            'help': 'I\'m here to help. What do you need support with?',
+            'return policy': 'Our return policy allows returns within 30 days of purchase. Would you like more details?',
+            'order tracking': 'You can track your order by visiting our Track Order page and entering your order number.',
+            'bye': 'Thank you for chatting. Have a great day!',
+            'default': 'I\'m not sure I understand. Could you rephrase that or ask another question?'
+        };
+
+        function toggleChat() {
+            chatbotContainer.style.display = chatbotContainer.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function addMessage(message, type = 'bot-message') {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const message = userInput.value.trim().toLowerCase();
+            if (message) {
+                addMessage(userInput.value, 'user-message');
+                const botResponse = botResponses[message] || botResponses['default'];
+                setTimeout(() => addMessage(botResponse), 500);
+                userInput.value = '';
+            }
+        }
+
+        chatToggle.addEventListener('click', toggleChat);
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

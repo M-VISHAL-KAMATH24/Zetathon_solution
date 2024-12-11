@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Support</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        #contact-form, #faq, #chat-box {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        #chat-box {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        #chat-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            height: 60px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Customer Support</h1>
+
+    <!-- Contact Form -->
+    <div id="contact-form">
+        <h2>Contact Us</h2>
+        <form action="/send-message" method="POST">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="message">Message:</label><br>
+            <textarea id="message" name="message" required></textarea><br><br>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- FAQ Section -->
+    <div id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <div>
+            <h3 onclick="toggleAnswer('answer1')">What is your return policy?</h3>
+            <p id="answer1" style="display:none;">You can return items within 30 days of purchase. For more details, visit our return policy page.</p>
+        </div>
+
+        <div>
+            <h3 onclick="toggleAnswer('answer2')">How can I track my order?</h3>
+            <p id="answer2" style="display:none;">Visit our 'Track Order' page and enter your order number.</p>
+        </div>
+    </div>
+
+    <!-- Live Chat -->
+    <button onclick="toggleChat()">Chat with us</button>
+
+    <div id="chat-box">
+        <div id="chat-header">
+            <span>Customer Support</span>
+            <button onclick="toggleChat()">X</button>
+        </div>
+        <div id="chat-content" style="height: 300px; overflow-y: scroll;">
+            <!-- Chat messages will be appended here -->
+        </div>
+        <textarea id="chat-input" placeholder="Type your message..."></textarea>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        // Toggle FAQ answers
+        function toggleAnswer(id) {
+            var answer = document.getElementById(id);
+            answer.style.display = (answer.style.display === "none") ? "block" : "none";
+        }
+
+        // Toggle Live Chat box visibility
+        function toggleChat() {
+            var chatBox = document.getElementById("chat-box");
+            chatBox.style.display = (chatBox.style.display === "none" || chatBox.style.display === "") ? "block" : "none";
+        }
+
+        // Send message in the chat
+        function sendMessage() {
+            var input = document.getElementById("chat-input").value;
+            if (input.trim() !== "") {
+                var chatContent = document.getElementById("chat-content");
+                var newMessage = document.createElement("p");
+                newMessage.textContent = "You: " + input;
+                chatContent.appendChild(newMessage);
+                document.getElementById("chat-input").value = "";
+                chatContent.scrollTop = chatContent.scrollHeight;
+            }
+        }
+    </script>
+</body>
+</html>

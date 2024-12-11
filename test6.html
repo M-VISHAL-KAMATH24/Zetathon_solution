@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Location Selector</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1a1a1a;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        #location-container {
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease;
+        }
+        h2 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #location-display {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #333333;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        #submitBtn {
+            display: none;
+            margin-top: 20px;
+            width: 100%;
+            background-color: #2196F3;
+        }
+        #submitBtn:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div id="location-container">
+        <h2>Location Selector</h2>
+        <button id="getLocationBtn">Get My Location</button>
+        <div id="location-display">
+            Location will be shown here
+        </div>
+        <a href="sub_thankyou.html">
+        <button id="submitBtn">Submit Location</button>
+    </a>
+    </div>
+
+    <script>
+        const locationDisplay = document.getElementById('location-display');
+        const submitBtn = document.getElementById('submitBtn');
+        let locationData = null;
+
+        document.getElementById('getLocationBtn').addEventListener('click', () => {
+            if ('geolocation' in navigator) {
+                locationDisplay.textContent = 'Fetching location...';
+                submitBtn.style.display = 'none';
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        
+                        locationData = {
+                            latitude,
+                            longitude
+                        };
+
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                const address = data.display_name || 'Address not found';
+                                locationDisplay.innerHTML = `
+                                    <strong>Coordinates:</strong> ${latitude}, ${longitude}<br>
+                                    <strong>Address:</strong> ${address}
+                                `;
+                                locationData.address = address;
+                                submitBtn.style.display = 'block';
+                            })
+                            .catch(error => {
+                                locationDisplay.textContent = 'Unable to fetch address details.';
+                            });
+                    },
+                    (error) => {
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                locationDisplay.textContent = 'Location access denied by user.';
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                locationDisplay.textContent = 'Location information unavailable.';
+                                break;
+                            case error.TIMEOUT:
+                                locationDisplay.textContent = 'Location request timed out.';
+                                break;
+                            default:
+                                locationDisplay.textContent = 'An unknown error occurred.';
+                        }
+                    }
+                );
+            } else {
+                locationDisplay.textContent = 'Geolocation is not supported by this browser.';
+            }
+        });
+
+        submitBtn.addEventListener('click', () => {
+            if (locationData) {
+                // Here you can add your submit logic
+                console.log('Submitting location data:', locationData);
+                alert('Location submitted successfully!');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Options - ServiceHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        /* Navbar styles */
+        .navbar {
+            background-color: #1e1e1e;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 70px;
+            align-items: center;
+            transition: background-color 0.3s, padding 0.3s;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s ease;
+        }
+        .navbar a:hover {
+            color: #4CAF50;
+            text-decoration: underline;
+        }
+
+        /* Toggle button styles */
+        .toggle-theme {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+        .toggle-theme:hover {
+            transform: scale(1.2);
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+        .dark-mode .navbar {
+            background-color: #1e1e1e;
+        }
+        .dark-mode .navbar a {
+            color: white;
+        }
+
+        .services-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+        .service-card {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 250px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
+            color: white;
+        }
+        .service-card:hover {
+            transform: scale(1.05);
+            background-color: #4CAF50;
+            color: black;
+        }
+        .service-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        .service-card h3 {
+            margin: 10px 0;
+        }
+        .book-now-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .book-now-btn:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body class="dark-mode">
+
+    <!-- Toggle Button -->
+    <button class="toggle-theme" onclick="toggleMode()">🌙</button>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">ZetaSolutions</a>
+        <div class="navbar-links">
+            <a href="#">Services</a>
+            <a href="booking.html">Bookings</a>
+            <a href="customer_support.html">HelpLine</a>
+            <a href="profile.html">Profile</a>
+            <a href="indexmain.html">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Services Container -->
+    <div class="services-container">
+        <!-- Service Cards -->
+        <div class="service-card">
+            <img src="images/ac_electrician.jpg" alt="AC Technician">
+            <h3>AC Technicians</h3>
+            <p>Expert repair and maintenance for all AC units</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+        <div class="service-card">
+            <img src="images/electrian.jpg" alt="Electrician">
+            <h3>Electricians</h3>
+            <p>Professional electrical installation and repair</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+        <div class="service-card">
+            <img src="images/plumber.jpg" alt="Plumber">
+            <h3>Plumbers</h3>
+            <p>Comprehensive plumbing solutions</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+        <!-- Mechanics -->
+        <div class="service-card">
+            <img src="images/mechanics.jpg" alt="Mechanic">
+            <h3>Mechanics</h3>
+            <p>Vehicle repair and maintenance services</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+
+        <!-- Carpenters -->
+        <div class="service-card">
+            <img src="images/carpenter.jpg" alt="Carpenter">
+            <h3>Carpenters</h3>
+            <p>Custom woodwork and furniture repair</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+
+        <!-- Cleaning Services -->
+        <div class="service-card">
+            <img src="images/clean.jpg" alt="Cleaning Service">
+            <h3>Cleaning Services</h3>
+            <p>Professional home and office cleaning</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+
+        <!-- Pest Control -->
+        <div class="service-card">
+            <img src="images/cleaning.jpg" alt="Pest Control">
+            <h3>Pest Control</h3>
+            <p>Comprehensive pest elimination services</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+
+        <!-- Home Appliances Repair -->
+        <div class="service-card">
+            <img src="images/home_appli.jpg" alt="Appliance Repair">
+            <h3>Home Appliances Repair</h3>
+            <p>Expert repair for all household appliances</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+
+        <!-- Building Painting -->
+        <div class="service-card">
+            <img src="images/paint.jpg" alt="Painting Service">
+            <h3>Building Painting</h3>
+            <p>Professional painting and decoration services</p>
+            <a href="index2.html" class="book-now-btn">Book Now</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleMode() {
+            const body = document.body;
+            const button = document.querySelector('.toggle-theme');
+
+            // Toggle classes for light and dark mode
+            body.classList.toggle('dark-mode');
+
+            // Change button text based on mode
+            button.textContent = body.classList.contains('dark-mode') ? '🌕' : '🌙';
+        }
+    </script>
+</body>
+</html>

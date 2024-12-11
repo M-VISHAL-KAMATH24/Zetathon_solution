@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Technicians - Service Providers | ServiceHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 50px;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: 30px auto;
+        }
+        .filter-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .filter-label {
+            font-weight: bold;
+        }
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .providers-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .providers-table th, 
+        .providers-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .providers-table th {
+            background-color: #f2f2f2;
+            color: #333;
+            cursor: pointer;
+        }
+        .providers-table th:hover {
+            background-color: #e2e2e2;
+        }
+        .book-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .book-btn:hover {
+            background-color: #45a049;
+        }
+        #no-results {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            display: none;
+        }
+        #booking-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .booking-modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-btn:hover {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">ServiceHub</a>
+        <div class="navbar-links">
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <a href="#">Bookings</a>
+            <a href="#">Profile</a>
+            <a href="#">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-group">
+                <span class="filter-label">Price Range:</span>
+                <div class="price-range">
+                    <label for="min-price">Min:</label>
+                    <input type="number" id="min-price" min="0" value="0">
+                    <label for="max-price">Max:</label>
+                    <input type="number" id="max-price" min="0" value="2500">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Sort Price:</span>
+                <select id="price-sort">
+                    <option value="default">Default</option>
+                    <option value="low-to-high">Low to High</option>
+                    <option value="high-to-low">High to Low</option>
+                </select>
+            </div>
+
+            <button id="apply-filters" class="book-btn">Apply</button>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results">
+            <h2>No service providers match your current filters.</h2>
+            <p>Try adjusting your price range.</p>
+        </div>
+
+        <!-- Service Providers Table -->
+        <table class="providers-table" id="providers-table">
+            <thead>
+                <tr>
+                    <th>Provider ID</th>
+                    <th>Name</th>
+                    <th>Experience</th>
+                    <th>Contact Email</th>
+                    <th>Phone Number</th>
+                    <th>Price Range</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="providers-body">
+                <tr data-price-min="500" data-price-max="1500">
+                    <td>SVCH001</td>
+                    <td>Raj Kumar</td>
+                    <td>8 Years</td>
+                    <td>raj.kumar@servicehub.com</td>
+                    <td>+91 9876543210</td>
+                    <td>₹500 - ₹1500</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="400" data-price-max="1200">
+                    <td>SVCH002</td>
+                    <td>Amit Sharma</td>
+                    <td>5 Years</td>
+                    <td>amit.sharma@servicehub.com</td>
+                    <td>+91 9988776655</td>
+                    <td>₹400 - ₹1200</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="600" data-price-max="2000">
+                    <td>SVCH003</td>
+                    <td>Vikram Singh</td>
+                    <td>10 Years</td>
+                    <td>vikram.singh@servicehub.com</td>
+                    <td>+91 8765432109</td>
+                    <td>₹600 - ₹2000</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="450" data-price-max="1300">
+                    <td>SVCH004</td>
+                    <td>Priya Patel</td>
+                    <td>6 Years</td>
+                    <td>priya.patel@servicehub.com</td>
+                    <td>+91 7654321098</td>
+                    <td>₹450 - ₹1300</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="700" data-price-max="2500">
+                    <td>SVCH005</td>
+                    <td>Anil Gupta</td>
+                    <td>12 Years</td>
+                    <td>anil.gupta@servicehub.com</td>
+                    <td>+91 9087654321</td>
+                    <td>₹700 - ₹2500</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="350" data-price-max="1000">
+                    <td>SVCH006</td>
+                    <td>Sanjay Mehta</td>
+                    <td>4 Years</td>
+                    <td>sanjay.mehta@servicehub.com</td>
+                    <td>+91 8976543210</td>
+                    <td>₹350 - ₹1000</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="500" data-price-max="1800">
+                    <td>SVCH007</td>
+                    <td>Deepak Kumar</td>
+                    <td>7 Years</td>
+                    <td>deepak.kumar@servicehub.com</td>
+                    <td>+91 9876512345</td>
+                    <td>₹500 - ₹1800</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="400" data-price-max="1400">
+                    <td>SVCH008</td>
+                    <td>Neha Sharma</td>
+                    <td>5 Years</td>
+                    <td>neha.sharma@servicehub.com</td>
+                    <td>+91 7654987654</td>
+                    <td>₹400 - ₹1400</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="550" data-price-max="1700">
+                    <td>SVCH009</td>
+                    <td>Rohit Yadav</td>
+                    <td>9 Years</td>
+                    <td>rohit.yadav@servicehub.com</td>
+                    <td>+91 8765098765</td>
+                    <td>₹550 - ₹1700</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr data-price-min="450" data-price-max="1500">
+                    <td>SVCH010</td>
+                    <td>Manish Tiwari</td>
+                    <td>6 Years</td>
+                    <td>manish.tiwari@servicehub.com</td>
+                    <td>+91 9087654321</td>
+                    <td>₹450 - ₹1500</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal">
+        <div class="booking-modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Booking Confirmation</h2>
+            <p>Provider: <span id="modal-provider-name"></span></p>
+            <p>Provider ID: <span id="modal-provider-id"></span></p>
+            
+            <form id="booking-form">
+                <label>Service Date:
+                    <input type="date" id="service-date" required>
+                </label>
+                <label>Preferred Time:
+                    <input type="time" id="service-time" required>
+                </label>
+                <label>Additional Notes:
+                    <textarea id="service-notes" rows="3"></textarea>
+                </label>
+                <button type="submit" class="book-btn">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function applyFilters() {
+            const minPrice = parseInt(document.getElementById('min-price').value);
+            const maxPrice = parseInt(document.getElementById('max-price').value);
+            const sortOption = document.getElementById('price-sort').value;
+            
+            // Get all rows and convert to array
+            const rows = Array.from(document.querySelectorAll('#providers-body tr'));
+            
+            // Filter and sort rows
+            const filteredRows = rows.filter(row => {
+                const rowPriceMin = parseInt(row.getAttribute('data-price-min'));
+                const rowPriceMax = parseInt(row.getAttribute('data-price-max'));
+                
+                return rowPriceMin >= minPrice && rowPriceMax <= maxPrice;
+            });
+            
+            // Sort rows based on selected option
+            switch(sortOption) {
+                case 'low-to-high':
+                    filteredRows.sort((a, b) => {
+                        const priceA = parseInt(a.getAttribute('data-price-min'));
+                        const priceB = parseInt(b.getAttribute('data-price-min'));
+                        return priceA - priceB;
+                    });
+                    break;
+                case 'high-to-low':
+                    filteredRows.sort((a, b) => {
+                        const priceA = parseInt(a.getAttribute('data-price-max'));
+                        const priceB = parseInt(b.getAttribute('data-price-max'));
+                        return priceB - priceA;
+                    });
+                    break;
+                default:
+                    // Keep original order if default is selected
+                    break;
+            }
+            
+            // Clear the current table body
+            const providersBody = document.getElementById('providers-body');
+            providersBody.innerHTML = '';
+            
+            // Re-add filtered and sorted rows
+            filteredRows.forEach(row => {
+                providersBody.appendChild(row);
+            });
+            
+            // Show/hide no results message
+            const noResultsDiv = document.getElementById('no-results');
+            noResultsDiv.style.display = filteredRows.length > 0 ? 'none' : 'block';
+        }
+        
+        // Modal handling
+        const modal = document.getElementById('booking-modal');
+        const closeBtn = document.querySelector('.close-btn');
+        const modalProviderName = document.getElementById('modal-provider-name');
+        const modalProviderId = document.getElementById('modal-provider-id');
+        const bookingForm = document.getElementById('booking-form');
+
+        // Add event listener to apply filters button
+        document.getElementById('apply-filters').addEventListener('click', applyFilters);
+        
+        // Re-add Book Now button functionality to dynamically added rows
+        document.getElementById('providers-body').addEventListener('click', function(event) {
+            const bookBtn = event.target.closest('.book-btn');
+            if (bookBtn) {
+                const row = bookBtn.closest('tr');
+                const providerName = row.querySelector('td:nth-child(2)').textContent;

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Technicians - Service Providers | ServiceHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 50px;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .service-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .providers-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .providers-table th, 
+        .providers-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .providers-table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+        .book-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .book-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">ServiceHub</a>
+        <div class="navbar-links">
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <a href="#">Bookings</a>
+            <a href="#">Profile</a>
+            <a href="#">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Service Providers Container -->
+    <div class="container">
+        <h1 class="service-title">AC Technicians Service Providers</h1>
+        
+        <table class="providers-table">
+            <thead>
+                <tr>
+                    <th>Provider ID</th>
+                    <th>Name</th>
+                    <th>Experience</th>
+                    <th>Contact Email</th>
+                    <th>Phone Number</th>
+                    <th>Price Range</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>SVCH001</td>
+                    <td>Raj Kumar</td>
+                    <td>8 Years</td>
+                    <td>raj.kumar@servicehub.com</td>
+                    <td>+91 9876543210</td>
+                    <td>₹500 - ₹1500</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH002</td>
+                    <td>Amit Sharma</td>
+                    <td>5 Years</td>
+                    <td>amit.sharma@servicehub.com</td>
+                    <td>+91 9988776655</td>
+                    <td>₹400 - ₹1200</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH003</td>
+                    <td>Vikram Singh</td>
+                    <td>10 Years</td>
+                    <td>vikram.singh@servicehub.com</td>
+                    <td>+91 8765432109</td>
+                    <td>₹600 - ₹2000</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH004</td>
+                    <td>Priya Patel</td>
+                    <td>6 Years</td>
+                    <td>priya.patel@servicehub.com</td>
+                    <td>+91 7654321098</td>
+                    <td>₹450 - ₹1300</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH005</td>
+                    <td>Anil Gupta</td>
+                    <td>12 Years</td>
+                    <td>anil.gupta@servicehub.com</td>
+                    <td>+91 9087654321</td>
+                    <td>₹700 - ₹2500</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH006</td>
+                    <td>Sanjay Mehta</td>
+                    <td>4 Years</td>
+                    <td>sanjay.mehta@servicehub.com</td>
+                    <td>+91 8976543210</td>
+                    <td>₹350 - ₹1000</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH007</td>
+                    <td>Deepak Kumar</td>
+                    <td>7 Years</td>
+                    <td>deepak.kumar@servicehub.com</td>
+                    <td>+91 9876512345</td>
+                    <td>₹500 - ₹1800</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH008</td>
+                    <td>Neha Sharma</td>
+                    <td>5 Years</td>
+                    <td>neha.sharma@servicehub.com</td>
+                    <td>+91 7654987654</td>
+                    <td>₹400 - ₹1400</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH009</td>
+                    <td>Rohit Yadav</td>
+                    <td>9 Years</td>
+                    <td>rohit.yadav@servicehub.com</td>
+                    <td>+91 8765098765</td>
+                    <td>₹550 - ₹1700</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+                <tr>
+                    <td>SVCH010</td>
+                    <td>Manish Tiwari</td>
+                    <td>6 Years</td>
+                    <td>manish.tiwari@servicehub.com</td>
+                    <td>+91 9087654321</td>
+                    <td>₹450 - ₹1500</td>
+                    <td><button class="book-btn">Book Now</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Add event listeners to Book Now buttons
+        document.querySelectorAll('.book-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const row = this.closest('tr');
+                const providerName = row.querySelector('td:nth-child(2)').textContent;
+                const providerID = row.querySelector('td:nth-child(1)').textContent;
+                
+                // Simple booking confirmation (replace with actual booking logic)
+                const confirmBooking = confirm(`Do you want to book service with ${providerName} (Provider ID: ${providerID})?`);
+                
+                if (confirmBooking) {
+                    alert(`Booking confirmed for ${providerName}. Our team will contact you shortly.`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

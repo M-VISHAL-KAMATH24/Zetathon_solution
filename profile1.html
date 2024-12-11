@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #b0b0b0;
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.dark-theme {
+            background-color: #121212;
+            color: #b0b0b0;
+        }
+
+        .navbar {
+            background-color: #1a1a1a;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 70px;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a {
+            color: #64ffda;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #00e676;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background-color: #1e1e1e;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 2rem;
+            border: 4px solid #64ffda;
+        }
+
+        .profile-image-upload {
+            display: none;
+        }
+
+        .profile-image-label {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .profile-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #64ffda;
+            text-align: center;
+            padding: 10px;
+            border-radius: 0 0 50% 50%;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .profile-image-label:hover .profile-image-overlay {
+            opacity: 1;
+        }
+
+        .profile-details {
+            flex-grow: 1;
+        }
+
+        .profile-form {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input, 
+        .form-group select {
+            padding: 0.5rem;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333;
+            color: #fff;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .profile-form input:disabled,
+        .profile-form select:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+
+        .edit-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background-color: #64ffda;
+            color: black;
+            transition: background-color 0.3s;
+        }
+
+        .btn-edit:hover {
+            background-color: #00e676;
+        }
+
+        .btn-save {
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .btn-save:hover {
+            background-color: #45a049;
+        }
+
+        .btn-cancel {
+            background-color: #f44336;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #d32f2f;
+        }
+
+        .toggle-theme {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            transition: transform 0.3s, background-color 0.3s;
+            z-index: 1000;
+        }
+
+        .toggle-theme:hover {
+            transform: scale(1.2);
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            padding: 5px;
+        }
+
+        .error-message {
+            color: #ff7777;
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+
+        body.dark-theme .error-message {
+            color: #ff5252;
+        }
+
+    </style>
+</head>
+<body>
+    <button class="toggle-theme" id="toggleThemeBtn">🌙</button>
+
+    <nav class="navbar">
+        <a href="#" class="logo">ZetaSolutions</a>
+        <div class="navbar-links">
+            <a href="services.html">Services</a>
+            <a href="booking.html">Bookings</a>
+            <a href="profile.html">Profile</a>
+            <a href="/Frontend/home.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <label class="profile-image-label">
+                <input type="file" accept="image/*" class="profile-image-upload" id="profileImageUpload">
+                <img src="/api/placeholder/200/200" alt="Profile" class="profile-image" id="profileImage">
+                <div class="profile-image-overlay">Change Photo</div>
+            </label>
+            
+            <div class="profile-details">
+                <form id="profileForm" class="profile-form">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" disabled>
+                        <div id="firstNameError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" disabled>
+                        <div id="lastNameError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" disabled>
+                        <div id="emailError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" disabled>
+                        <div id="phoneError" class="error-message"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="serviceType">Service Type</label>
+                        <select id="serviceType" name="serviceType" disabled>
+                            <option value="">Select Service</option>
+                            <option value="ac-technician">AC Technician</option>
+                            <option value="electrician">Electrician</option>
+                            <option value="plumber">Plumber</option>
+                            <option value="mechanic">Mechanic</option>
+                            <option value="carpenter">Carpenter</option>
+                            <option value="technician">Technician</option>
+                            <option value="cleaning">Cleaning Services</option>
+                            <option value="pest-control">Pest Control</option>
+                            <option value="home-appliances">Home Appliances Repair</option>
+                            <option value="painting">Building Painting</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="edit-buttons">
+            <button class="btn btn-edit" id="editProfileBtn">Edit</button>
+            <button class="btn btn-save" id="saveProfileBtn" style="display: none;">Save</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+            const body = document.body;
+
+            toggleThemeBtn.addEventListener('click', () => {
+                body.classList.toggle('dark-theme');
+                toggleThemeBtn.textContent = body.classList.contains('dark-theme') ? '☀' : '';
+            });
+
+            const profileForm = document.getElementById('profileForm');
+            const editProfileBtn = document.getElementById('editProfileBtn');
+            const saveProfileBtn = document.getElementById('saveProfileBtn');
+            const profileImage = document.getElementById('profileImage');
+            const profileImageUpload = document.getElementById('profileImageUpload');
+
+            editProfileBtn.addEventListener('click', () => {
+                profileForm.querySelectorAll('input, select').forEach(input => input.disabled = false);
+                saveProfileBtn.style.display = 'inline-block';
+                editProfileBtn.style.display = 'none';
+            });
+
+            saveProfileBtn.addEventListener('click', () => {
+                profileForm.querySelectorAll('input, select').forEach(input => input.disabled = true);
+                saveProfileBtn.style.display = 'none';
+                editProfileBtn.style.display = 'inline-block';
+                // Simulate saving profile
+                alert('Profile saved!');
+            });
+
+            profileImageUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        profileImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

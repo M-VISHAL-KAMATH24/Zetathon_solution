@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AC Technicians - Service Providers | ServiceHub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light text for contrast */
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: #1d1d1d; /* Dark navbar */
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 50px;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: #4CAF50; /* Green links */
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #81C784; /* Lighter green on hover */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: 30px auto;
+        }
+
+        .filter-section {
+            background-color: #1f1f1f; /* Dark background for filter */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .filter-label {
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+
+        .price-range {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .providers-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1f1f1f;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .providers-table th,
+        .providers-table td {
+            border: 1px solid #333; /* Dark border */
+            padding: 12px;
+            text-align: left;
+            color: #e0e0e0; /* Light text color for table */
+        }
+
+        .providers-table th {
+            background-color: #333; /* Dark header */
+            color: #e0e0e0;
+            cursor: pointer;
+        }
+
+        .providers-table th:hover {
+            background-color: #444; /* Hover effect on headers */
+        }
+
+        .providers-table tr:hover {
+            background-color: #333; /* Hover effect on rows */
+        }
+
+        .book-btn {
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .book-btn:hover {
+            background-color: #45a049; /* Hover effect on button */
+        }
+
+        #no-results {
+            text-align: center;
+            padding: 20px;
+            background-color: #1f1f1f;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            display: none;
+            color: #e0e0e0;
+        }
+
+        input[type="number"], select {
+            background-color: #333;
+            color: #e0e0e0;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50; /* Green outline on focus */
+        }
+
+        .provider-details {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .provider-details span {
+            color: #81C784;
+            font-weight: bold;
+        }
+
+        /* Modal styling */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #1d1d1d;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .modal-content h2 {
+            color: #e0e0e0;
+        }
+
+        .modal-content p {
+            color: #e0e0e0;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #4CAF50;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">ServiceHub</a>
+        <div class="navbar-links">
+            <a href="indexmain.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="booking.html">Bookings</a>
+            <a href="profile.html">Profile</a>
+            <a href="indexmain.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-group">
+                <span class="filter-label">Price Range:</span>
+                <div class="price-range">
+                    <label for="min-price">Min:</label>
+                    <input type="number" id="min-price" min="0" value="0">
+                    <label for="max-price">Max:</label>
+                    <input type="number" id="max-price" min="0" value="2500">
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-label">Sort Price:</span>
+                <select id="price-sort">
+                    <option value="default">Default</option>
+                    <option value="low-to-high">Low to High</option>
+                    <option value="high-to-low">High to Low</option>
+                </select>
+            </div>
+
+            <button id="apply-filters" class="book-btn">Apply</button>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results">
+            <h2>No service providers match your current filters.</h2>
+            <p>Try adjusting your price range.</p>
+        </div>
+
+        <!-- Service Providers Table -->
+        <table class="providers-table" id="providers-table">
+            <thead>
+                <tr>
+                    <th>Provider ID</th>
+                    <th>Name</th>
+                    <th>Experience</th>
+                    <th>Location</th>
+                    <th>Contact Email</th>
+                    <th>Price Range</th>
+                    <th>Ratings</th>
+                    <th>Available Today</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="providers-body">
+                <!-- Existing Providers -->
+                <tr data-price-min="500" data-price-max="1500">
+                    <td>SVCH001</td>
+                    <td>Raj Kumar</td>
+                    <td>8 Years</td>
+                    <td>New Delhi</td>
+                    <td>raj.kumar@servicehub.com</td>
+                    <td>₹500 - ₹1500</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>
+                </tr>
+                <tr data-price-min="800" data-price-max="1800">
+                    <td>SVCH002</td>
+                    <td>Aman Verma</td>
+                    <td>5 Years</td>
+                    <td>Bangalore</td>
+                    <td>aman.verma@servicehub.com</td>
+                    <td>₹800 - ₹1800</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                    <td>No</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="1000" data-price-max="2200">
+                    <td>SVCH003</td>
+                    <td>Priya Singh</td>
+                    <td>6 Years</td>
+                    <td>Chennai</td>
+                    <td>priya.singh@servicehub.com</td>
+                    <td>₹1000 - ₹2200</td>
+                    <td>⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="700" data-price-max="1700">
+                    <td>SVCH004</td>
+                    <td>Deepak Sharma</td>
+                    <td>10 Years</td>
+                    <td>Hyderabad</td>
+                    <td>deepak.sharma@servicehub.com</td>
+                    <td>₹700 - ₹1700</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="1200" data-price-max="2400">
+                    <td>SVCH005</td>
+                    <td>Neha Kapoor</td>
+                    <td>7 Years</td>
+                    <td>Kolkata</td>
+                    <td>neha.kapoor@servicehub.com</td>
+                    <td>₹1200 - ₹2400</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>No</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+
+                <!-- New Providers -->
+                <tr data-price-min="1100" data-price-max="2100">
+                    <td>SVCH006</td>
+                    <td>Sandeep Rawat</td>
+                    <td>9 Years</td>
+                    <td>Delhi</td>
+                    <td>sandeep.rawat@servicehub.com</td>
+                    <td>₹1100 - ₹2100</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="600" data-price-max="1400">
+                    <td>SVCH007</td>
+                    <td>Ashok Tiwari</td>
+                    <td>5 Years</td>
+                    <td>Pune</td>
+                    <td>ashok.tiwari@servicehub.com</td>
+                    <td>₹600 - ₹1400</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="1300" data-price-max="2500">
+                    <td>SVCH008</td>
+                    <td>Manoj Reddy</td>
+                    <td>12 Years</td>
+                    <td>Bangalore</td>
+                    <td>manoj.reddy@servicehub.com</td>
+                    <td>₹1300 - ₹2500</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                    <td>No</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="1500" data-price-max="2800">
+                    <td>SVCH009</td>
+                    <td>Shivani Sharma</td>
+                    <td>8 Years</td>
+                    <td>Lucknow</td>
+                    <td>shivani.sharma@servicehub.com</td>
+                    <td>₹1500 - ₹2800</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="1000" data-price-max="2200">
+                    <td>SVCH010</td>
+                    <td>Ravindra Singh</td>
+                    <td>7 Years</td>
+                    <td>Chandigarh</td>
+                    <td>ravindra.singh@servicehub.com</td>
+                    <td>₹1000 - ₹2200</td>
+                    <td>⭐⭐⭐⭐⭐</td>
+                    <td>No</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="800" data-price-max="1600">
+                    <td>SVCH011</td>
+                    <td>Alok Verma</td>
+                    <td>6 Years</td>
+                    <td>Hyderabad</td>
+                    <td>alok.verma@servicehub.com</td>
+                    <td>₹800 - ₹1600</td>
+                    <td>⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+                <tr data-price-min="1300" data-price-max="2300">
+                    <td>SVCH012</td>
+                    <td>Sunil Patel</td>
+                    <td>5 Years</td>
+                    <td>Ahmedabad</td>
+                    <td>sunil.patel@servicehub.com</td>
+                    <td>₹1300 - ₹2300</td>
+                    <td>⭐⭐⭐⭐</td>
+                    <td>Yes</td>
+                    <td><a href="index.html"><button class="book-btn" data-provider="SVCH001">Book Now</button></a></td>                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Placeholder script for filter functionality
+        document.getElementById('apply-filters').addEventListener('click', function() {
+            let minPrice = parseInt(document.getElementById('min-price').value);
+            let maxPrice = parseInt(document.getElementById('max-price').value);
+            let sortValue = document.getElementById('price-sort').value;
+
+            let rows = document.querySelectorAll('.providers-table tbody tr');
+            let filteredRows = [];
+
+            rows.forEach(function(row) {
+                let priceMin = parseInt(row.dataset.priceMin);
+                let priceMax = parseInt(row.dataset.priceMax);
+
+                if (priceMin >= minPrice && priceMax <= maxPrice) {
+                    filteredRows.push(row);
+                }
+            });
+
+            filteredRows.forEach(function(row) {
+                document.getElementById('providers-body').appendChild(row);
+            });
+
+            if (filteredRows.length === 0) {
+                document.getElementById('no-results').style.display = 'block';
+            } else {
+                document.getElementById('no-results').style.display = 'none';
+            }
+
+            if (sortValue === 'low-to-high') {
+                filteredRows.sort(function(a, b) {
+                    return parseInt(a.dataset.priceMin) - parseInt(b.dataset.priceMin);
+                });
+            } else if (sortValue === 'high-to-low') {
+                filteredRows.sort(function(a, b) {
+                    return parseInt(b.dataset.priceMax) - parseInt(a.dataset.priceMax);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

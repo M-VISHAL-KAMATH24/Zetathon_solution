@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Chatbot</title>
+    <style>
+        /* General Styles for Dark Theme */
+        body {
+            font-family: 'Poppins', sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(to right, #141E30, #243B55);
+            color: #FFFFFF;
+            overflow-x: hidden;
+        }
+        #chatbot-container {
+            background-color: #1E2A38;
+            border-radius: 10px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            scrollbar-width: thin;
+            scrollbar-color: #4CAF50 #1E2A38;
+        }
+        #chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chat-messages::-webkit-scrollbar-thumb {
+            background-color: #4CAF50;
+            border-radius: 10px;
+        }
+        #user-input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #394855;
+            align-items: center;
+            background-color: #1A2634;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 14px;
+            background-color: #243B55;
+            color: #FFFFFF;
+            transition: all 0.3s ease-in-out;
+        }
+        #user-input:focus {
+            border-color: #76FF03;
+            box-shadow: 0 0 10px rgba(118, 255, 3, 0.5);
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: transform 0.2s, background-color 0.3s, box-shadow 0.3s;
+            margin-right: 10px;
+        }
+        #voice-input-btn {
+            background-color: #2196F3;
+            margin-right: 0;
+        }
+        .btn:hover {
+            background-color: #76FF03;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(118, 255, 3, 0.3);
+        }
+        #voice-input-btn:hover {
+            background-color: #1E88E5;
+        }
+
+        /* Message Styles */
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            opacity: 0;
+            animation: fadeInSlideUp 0.5s forwards;
+        }
+        .user-message {
+            background-color: #4CAF50;
+            color: #FFFFFF;
+            align-self: flex-end;
+            margin-left: auto;
+            animation: fadeInSlideRight 0.5s forwards;
+        }
+        .bot-message {
+            background-color: #394855;
+            color: #FFFFFF;
+            align-self: flex-start;
+            animation: fadeInSlideLeft 0.5s forwards;
+        }
+
+        /* Animations */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInSlideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeInSlideRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Status and Error */
+        .status {
+            color: #76FF03;
+            font-style: italic;
+            text-align: center;
+            margin: 10px 0;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .main_head {
+            color: #4CAF50;
+            text-align: center;
+        }
+        
+        .error {
+            color: #FF5722;
+            font-weight: bold;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="chatbot-container">
+        <h3 class="main_head">VISIONARY CHATBOX</h3>
+        <div id="chat-messages"></div>
+        <div id="user-input-container">
+            <input type="text" id="user-input" placeholder="Type or speak your message...">
+            <button id="send-btn" class="btn">Send</button>
+            <button id="voice-input-btn" class="btn">🎙 Voice Input</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const voiceInputBtn = document.getElementById('voice-input-btn');
+
+        const synth = window.speechSynthesis;
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+
+        const botResponses = {
+            'hi': 'Hello there! How can I help you today?',
+            'hello': 'Hi! Welcome to our voice chatbot.',
+            'how are you': 'I\'m doing great, thanks for asking!',
+            'help': 'Sure, I can help you. What do you need assistance with?',
+            'bye': 'Goodbye! Have a great day!',
+            'who are you': 'I\'m a voice chatbot. You can just call me Bot!',
+            'default': 'I didn\'t quite understand that. Could you rephrase?',
+            'thankyou': 'You are welcome!',
+            'can you solve me the question': 'Of course! What type of question would you like help with?',
+            'fuck you':'fuck you too',
+            'who is rohan':'he is chutiya',
+            'who is mahiba':'she is a pretty girl',
+            'who is vivek':'a randi',
+            'who is anto':'nicole lover'
+
+        };
+
+        function addMessage(message, type = 'bot-message') {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', type);
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+
+        function speakMessage(message) {
+            const utterance = new SpeechSynthesisUtterance(message);
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            synth.speak(utterance);
+        }
+
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                addMessage(message, 'user-message');
+                const botResponse = getBotResponse(message);
+                setTimeout(() => {
+                    addMessage(botResponse, 'bot-message');
+                    speakMessage(botResponse);
+                }, 500);
+                userInput.value = '';
+            }
+        }
+
+        function getBotResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase().trim();
+            for (let key in botResponses) {
+                if (lowerMessage.includes(key)) {
+                    return botResponses[key];
+                }
+            }
+            return botResponses['default'];
+        }
+
+        function initSpeechRecognition() {
+            if (!SpeechRecognition) {
+                addMessage('Speech recognition is not supported in this browser.', 'error');
+                voiceInputBtn.disabled = true;
+                return;
+            }
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                userInput.value = speechResult;
+                sendMessage();
+            };
+            recognition.onerror = () => {
+                addMessage('Speech recognition error.', 'error');
+            };
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        voiceInputBtn.addEventListener('click', () => {
+            if (!recognition) initSpeechRecognition();
+            recognition.start();
+        });
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>

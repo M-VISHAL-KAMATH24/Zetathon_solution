@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Service Bookings</title>
+    <style>
+        :root {
+            --bg-color: #111;
+            --text-color: #fff;
+            --card-bg: #242424;
+            --shadow-color: rgba(0,0,0,0.1);
+            --border-color: #444;
+            --completed-color: #32CD32; /* Lime green */
+            --pending-color: #FFD700; /* Gold */
+            --cancelled-color: #FF6347; /* Tomato */
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+    
+        .dashboard {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            padding: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+    
+        .filters {
+            display: flex;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+    
+        .booking-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+    
+        .booking-table th, 
+        .booking-table td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+    
+        .booking-table th {
+            background-color: var(--card-bg);
+            cursor: pointer;
+        }
+    
+        /* Status colors */
+        .status-completed { 
+            color: var(--completed-color); 
+            font-weight: bold; 
+        }
+        .status-pending { 
+            color: var(--pending-color); 
+            font-weight: bold; 
+        }
+        .status-cancelled { 
+            color: var(--cancelled-color); 
+            font-weight: bold; 
+        }
+    
+        select, input {
+            padding: 8px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+    
+        .no-bookings {
+            text-align: center;
+            color: var(--border-color);
+            padding: 20px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+    
+        .theme-toggle {
+            font-size: 20px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+    
+        .theme-toggle:hover {
+            transform: scale(1.2);
+        }
+    
+        .navbar {
+            background-color: #222;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 70px;
+            align-items: center;
+            transition: background-color 0.3s, padding 0.3s;
+        }
+    
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #32CD32;
+        }
+
+        .navbar .logo {
+            font-weight: bold;
+            font-size: 24px;
+            color: #32CD32;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .logo:hover {
+            color: #FFD700;
+        }
+
+        /* Hover effect on table rows */
+        .booking-table tr:hover {
+            background-color: #333;
+            cursor: pointer;
+        }
+
+        /* Dark Mode Styling */
+        [data-theme="dark"] .navbar {
+            background-color: #222;
+            color: #fff;
+        }
+    
+        [data-theme="dark"] .navbar a {
+            color: #fff;
+        }
+    
+        [data-theme="dark"] .navbar a:hover {
+            color: #32CD32; /* Green hover */
+        }
+    
+        [data-theme="dark"] .dashboard {
+            background-color: #1f1f1f;
+            color: #fff;
+        }
+    
+        [data-theme="dark"] .booking-table th,
+        [data-theme="dark"] .booking-table td {
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #444;
+        }
+    
+        [data-theme="dark"] .no-bookings {
+            background-color: #444;
+            color: #fff;
+        }
+    
+        [data-theme="dark"] .filters select, 
+        [data-theme="dark"] .filters input {
+            background-color: #555;
+            color: #fff;
+            border: 1px solid #666;
+        }
+    
+        [data-theme="dark"] .filters select:focus, 
+        [data-theme="dark"] .filters input:focus {
+            border-color: #32CD32;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" id="themeToggle"></button>
+
+    <nav class="navbar">
+        <a href="#" class="logo">ZetaSolutions</a>
+        <div class="navbar-links">
+            <a href="#">Services</a>
+            <a href="booking.html">Bookings</a>
+            <a href="profile1.html">Profile</a>
+            <a href="/Frontend/home.html">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard">
+        <h1>My Service Bookings</h1>
+        
+        <div class="filters">
+            <select id="serviceFilter">
+                <option value="">All Services</option>
+                <option value="AC Technicians">AC Technicians</option>
+                <option value="Electricians">Electricians</option>
+                <option value="Plumbers">Plumbers</option>
+                <option value="Mechanics">Mechanics</option>
+                <option value="Carpenters">Carpenters</option>
+                <option value="Technicians">Technicians</option>
+                <option value="Cleaning">Cleaning</option>
+                <option value="Pest Control">Pest Control</option>
+                <option value="Home Appliances Repair">Home Appliances Repair</option>
+                <option value="Building Paintings">Building Paintings</option>
+            </select>
+            
+            <select id="statusFilter">
+                <option value="">All Status</option>
+                <option value="completed">Completed</option>
+                <option value="pending">Pending</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+            
+            <input type="date" id="dateFilter">
+        </div>
+
+        <table class="booking-table" id="bookingsTable">
+            <thead>
+                <tr>
+                    <th onclick="sortTable(0)">Booking ID</th>
+                    <th onclick="sortTable(1)">Service Type</th>
+                    <th onclick="sortTable(2)">Provider</th>
+                    <th onclick="sortTable(3)">Date</th>
+                    <th onclick="sortTable(4)">Time</th>
+                    <th onclick="sortTable(5)">Price</th>
+                    <th onclick="sortTable(6)">Status</th>
+                </tr>
+            </thead>
+            <tbody id="bookingsBody">
+                <!-- Bookings will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const bookings = [
+            { id: 'BK-001', serviceType: 'AC Technicians', provider: 'CoolAir Services', date: '2024-02-15', time: '10:00 AM', price: 150.00, status: 'completed' },
+            { id: 'BK-002', serviceType: 'Electricians', provider: 'PowerLine Electrical', date: '2024-03-20', time: '02:00 PM', price: 200.00, status: 'pending' },
+            { id: 'BK-003', serviceType: 'Plumbers', provider: 'FixItRight Plumbing', date: '2024-04-10', time: '11:30 AM', price: 180.00, status: 'cancelled' },
+            { id: 'BK-004', serviceType: 'Cleaning', provider: 'Sparkle Home Services', date: '2024-05-05', time: '09:00 AM', price: 100.00, status: 'completed' },
+            { id: 'BK-005', serviceType: 'Home Appliances Repair', provider: 'TechFix Repairs', date: '2024-06-15', time: '03:45 PM', price: 120.00, status: 'pending' }
+        ];
+
+        function renderBookings(filteredBookings = bookings) {
+            const bookingsBody = document.getElementById('bookingsBody');
+            bookingsBody.innerHTML = '';
+
+            if (filteredBookings.length === 0) {
+                const noBookingsRow = document.createElement('tr');
+                noBookingsRow.innerHTML = '<td colspan="7" class="no-bookings">No bookings found. Try adjusting your filters.</td>';
+                bookingsBody.appendChild(noBookingsRow);
+            } else {
+                filteredBookings.forEach(booking => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = ` 
+                        <td>${booking.id}</td>
+                        <td>${booking.serviceType}</td>
+                        <td>${booking.provider}</td>
+                        <td>${booking.date}</td>
+                        <td>${booking.time}</td>
+                        <td>$${booking.price.toFixed(2)}</td>
+                        <td class="status-${booking.status}">${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}</td>
+                    `;
+                    bookingsBody.appendChild(row);
+                });
+            }
+        }
+
+        function applyFilters() {
+            const serviceFilter = document.getElementById('serviceFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFilter = document.getElementById('dateFilter').value;
+
+            const filteredBookings = bookings.filter(booking => {
+                const matchService = !serviceFilter || booking.serviceType === serviceFilter;
+                const matchStatus = !statusFilter || booking.status === statusFilter;
+                const matchDate = !dateFilter || booking.date === dateFilter;
+                return matchService && matchStatus && matchDate;
+            });
+
+            renderBookings(filteredBookings);
+        }
+
+        function sortTable(columnIndex) {
+            const keys = Object.keys(bookings[0]);
+            const sortedBookings = [...bookings].sort((a, b) => {
+                const key = keys[columnIndex];
+                return a[key].localeCompare(b[key]);
+            });
+            renderBookings(sortedBookings);
+        }
+
+        document.getElementById('serviceFilter').addEventListener('change', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateFilter').addEventListener('change', applyFilters);
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+            document.getElementById('themeToggle').textContent = currentTheme === 'dark' ? '' : '';
+        });
+
+        renderBookings();
+    </script>
+</body>
+</html>

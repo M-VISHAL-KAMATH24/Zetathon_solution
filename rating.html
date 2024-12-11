@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Provider Reviews</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .review-container {
+            width: 50%;
+            margin: 50px auto;
+            background: #1f1f1f;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            color: #28a745;
+            text-align: center;
+        }
+
+        .review-form input, 
+        .review-form textarea, 
+        .review-form select, 
+        .review-form button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #333;
+            color: #e0e0e0;
+        }
+
+        .review-form button {
+            background-color: #28a745;
+            cursor: pointer;
+        }
+
+        .review-form button:hover {
+            background-color: #218838;
+        }
+
+        .review {
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .review h3 {
+            margin: 0;
+            color: #f0f0f0;
+        }
+
+        .review p {
+            margin: 5px 0;
+            color: #bdbdbd;
+        }
+
+        .rating {
+            color: #ffd700;
+        }
+
+        .star-rating {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .star {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .star.selected {
+            color: #ffd700;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group input {
+            width: calc(100% - 24px);
+            display: inline-block;
+        }
+
+        .form-group label {
+            display: block;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background-color: #333;
+            border: 1px solid #444;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="review-container">
+        <h1>Customer Reviews</h1>
+
+        <div class="review-form">
+            <div class="form-group">
+                <label for="username">Your Name:</label>
+                <input type="text" id="username" placeholder="Enter your name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="review">Your Review:</label>
+                <textarea id="review" placeholder="Write your review here" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="rating">Rating:</label>
+                <div class="star-rating" id="star-rating">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+            </div>
+
+            <button onclick="submitReview()">Submit Review</button>
+        </div>
+
+        <div id="reviews"></div>
+    </div>
+
+    <script>
+        let selectedRating = 0;
+
+        document.querySelectorAll('.star').forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.getAttribute('data-value'));
+                document.querySelectorAll('.star').forEach(star => {
+                    star.classList.remove('selected');
+                });
+                for (let i = 0; i < selectedRating; i++) {
+                    document.querySelectorAll('.star')[i].classList.add('selected');
+                }
+            });
+        });
+
+        function submitReview() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const reviewText = document.getElementById('review').value;
+
+            if (!username || !email || !reviewText || selectedRating === 0) {
+                alert('Please fill out all fields and select a rating.');
+                return;
+            }
+
+            const reviewContainer = document.getElementById('reviews');
+            const review = document.createElement('div');
+            review.classList.add('review');
+
+            review.innerHTML = `
+                <h3>${username} - <span class="rating">${'★'.repeat(selectedRating)}${'☆'.repeat(5 - selectedRating)}</span></h3>
+                <p>${reviewText}</p>
+                <small>By: ${email}</small>
+            `;
+            reviewContainer.appendChild(review);
+
+            // Clear the form
+            document.getElementById('username').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('review').value = '';
+            selectedRating = 0;
+            document.querySelectorAll('.star').forEach(star => star.classList.remove('selected'));
+        }
+    </script>
+
+</body>
+</html>

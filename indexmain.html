@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Marketplace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color:black;
+            color: white;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode {
+            background-color: black;
+            color: white;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            text-align: center;
+            line-height: 40px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode .toggle-btn {
+            background-color: black;
+            color: white;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .login-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: white;
+            color: black;
+            text-decoration: none;
+            border-radius: 45px;
+            font-weight: bold;
+            transition: transform 0.3s ease, background-color 0.3s, color 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-provider {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-customer {
+            background-color: #0f87ea;
+            color: white;
+        }
+
+        .btn-admin {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .btn-customer:hover {
+            background-color: #003366; /* Dark blue hover effect */
+        }
+
+        .btn-provider:hover {
+            background-color: #2e7d32; /* Dark green hover effect */
+        }
+
+        .btn-admin:hover {
+            background-color: #e65100; /* Dark orange hover effect */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0f87ea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+
+        .form-button:hover {
+            background-color: #003366; /* Dark blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Small Toggle Button -->
+     
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Connect with Service Providers Instantly</h1>
+            <p>ZetaSolutions:Find the perfect service and experienced service providers at your door steps</p>
+            
+            <div class="login-buttons">
+                <a href="#" class="btn btn-customer" onclick="openModal('customer-login')">Customer Login</a>
+                <a href="#" class="btn btn-provider" onclick="openModal('provider-login')">Provider Login</a>
+                <a href="#" class="btn btn-admin" onclick="openModal('admin-login')">Admin Login</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Login Modal -->
+    <div id="customer-login" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('customer-login')">&times;</span>
+            <h2>Customer Login</h2>
+            <form action="services.html" method="get">
+                <input type="text" class="form-input" placeholder="Full Name" required>
+                <input type="text" class="form-input" placeholder="Address" required>
+                <input type="tel" class="form-input" placeholder="Phone Number" required>
+                <input type="email" class="form-input" placeholder="Email" required>
+                <input type="password" class="form-input" placeholder="Password" required>
+                <button  class="form-button">Login</button>
+                
+            </form>
+        </div>
+    </div>
+
+    <!-- Provider Login Modal -->
+    <div id="provider-login" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('provider-login')">&times;</span>
+            <h2>Provider Login</h2>
+            <form action="service_provider_profile.html" method="get">
+                <input type="text" class="form-input" placeholder="Full Name" required>
+                <input type="email" class="form-input" placeholder="Email" required>
+                <input type="password" class="form-input" placeholder="Password" required>
+                <button onclick="" type="submit" class="form-button">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('admin-login')">&times;</span>
+            <h2>Admin Login</h2>
+            <form action="admin_main.html" method="get">
+                <input type="text" class="form-input" placeholder="Username" required>
+                <input type="password" class="form-input" placeholder="Password" required>
+                <button type="submit" class="form-button">Login</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+    function toggleDarkMode() {
+        const body = document.body;
+        const toggleButton = document.querySelector('.toggle-btn');
+
+        body.classList.toggle('dark-mode');
+
+        // Update the button icon based on the mode
+        if (body.classList.contains('dark-mode')) {
+            toggleButton.textContent = ''; // Light mode icon
+        } else {
+            toggleButton.textContent = ''; // Dark mode icon
+        }
+    }
+
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        const modals = document.getElementsByClassName('modal');
+        for (let modal of modals) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    }
+</script>
+</body>
+</html>

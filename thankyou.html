@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You for Booking</title>
+    <style>
+        :root {
+            --background-dark: #121212;
+            --text-dark: #ccc;
+            --card-dark: #1e1e1e;
+            --button-dark: #66bb6a;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .thank-you-container {
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #333;
+            background-color: var(--card-dark);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .thank-you-container h1 {
+            color: var(--button-dark);
+        }
+        .thank-you-container p {
+            color: var(--text-dark);
+        }
+        .thank-you-container a {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: var(--button-dark);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .thank-you-container a:hover {
+            background-color: #57a164;
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <h1>Thank You for Booking!</h1>
+        <p>Your booking has been confirmed. We look forward to serving you.</p>
+        <a href="indexmain.html">Return to Homepage</a>
+    </div>
+</body>
+</html>

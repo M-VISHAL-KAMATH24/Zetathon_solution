@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServiceHub - Find Local Service Providers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212; /* Dark background */
+            color: #ecf0f1; /* Light text for dark mode */
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar {
+            background-color: #1e2a33; /* Darker background */
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 50px;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .navbar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            margin-left: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #2ecc71; /* Green hover effect */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1300px;
+            margin: 30px auto;
+        }
+
+        .filter-section {
+            background-color: #1e2a33; /* Dark background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .service-providers {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .provider-card {
+            background-color: #2c3e50; /* Dark card background */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .provider-card:hover {
+            transform: scale(1.03);
+            background-color: #34495e; /* Lighter dark on hover */
+        }
+
+        .provider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .provider-category {
+            background-color: #2ecc71; /* Green background */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+
+        .book-btn {
+            background-color: #27ae60; /* Green button */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .book-btn:hover {
+            background-color: #2ecc71; /* Brighter green on hover */
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        /* Dark theme for modals */
+        .modal-content {
+            background-color: #34495e;
+            color: #ecf0f1;
+        }
+
+        /* Additional styles for input fields */
+        input, select {
+            background-color: #2c3e50; /* Dark input background */
+            color: #ecf0f1;
+            padding: 10px;
+            border: 1px solid #34495e;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #2ecc71; /* Green border on focus */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">ZetaSolutions</div>
+        <div>
+            <a href="indexmain.html">Home</a>
+            <a href="services.html">Services</a>
+            <a href="bookings.html">Bookings</a>
+            <a href="profile.html">Profile</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="filter-section">
+            <div class="filter-group">
+                <select id="category-filter">
+                    <option value="all">All Categories</option>
+                    <option value="AC Technicians">AC Technicians</option>
+                    <option value="Electricians">Electricians</option>
+                    <option value="Plumbers">Plumbers</option>
+                    <option value="Mechanics">Mechanics</option>
+                    <option value="Carpenters">Carpenters</option>
+                    <option value="Home Appliance Repair">Home Appliance Repair</option>
+                    <option value="Cleaning">Cleaning</option>
+                    <option value="Pest Control">Pest Control</option>
+                    <option value="Painting">Painting</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="providers-container" class="service-providers"></div>
+    </div>
+
+    <script>
+        const categories = [
+            'AC Technicians', 
+            'Electricians', 
+            'Plumbers', 
+            'Mechanics', 
+            'Carpenters', 
+            'Home Appliance Repair', 
+            'Cleaning', 
+            'Pest Control', 
+            'Painting'
+        ];
+
+        const firstNames = [
+            'Raj', 'Amit', 'Priya', 'Vikram', 'Neha', 'Sandeep', 'Deepak', 
+            'Anita', 'Rahul', 'Sanjay', 'Manish', 'Kavita', 'Suresh', 'Meera'
+        ];
+
+        const lastNames = [
+            'Kumar', 'Sharma', 'Patel', 'Singh', 'Gupta', 'Mehta', 'Yadav', 
+            'Verma', 'Desai', 'Joshi', 'Malhotra', 'Agarwal', 'Reddy', 'Khan'
+        ];
+
+        function generateProviders() {
+            const providersContainer = document.getElementById('providers-container');
+            providersContainer.innerHTML = '';
+
+            // Generate 15 random service providers
+            for (let i = 0; i < 15; i++) {
+                const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+                const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                
+                // Generate realistic pricing based on category
+                const pricingRanges = {
+                    'AC Technicians': [500, 2500],
+                    'Electricians': [300, 2000],
+                    'Plumbers': [400, 1800],
+                    'Mechanics': [600, 3000],
+                    'Carpenters': [400, 2200],
+                    'Home Appliance Repair': [300, 1500],
+                    'Cleaning': [200, 1000],
+                    'Pest Control': [500, 1800],
+                    'Painting': [800, 3500]
+                };
+
+                const [minPrice, maxPrice] = pricingRanges[category];
+                const workPrice = Math.floor(Math.random() * (maxPrice - minPrice + 1)) + minPrice;
+
+                const providerCard = document.createElement('div');
+                providerCard.classList.add('provider-card');
+                providerCard.dataset.category = category;
+                providerCard.innerHTML = `
+                    <div class="provider-header">
+                        <h3>${firstName} ${lastName}</h3>
+                        <div class="provider-category">${category}</div>
+                    </div>
+                    <p><strong>Contact:</strong> ${firstName.toLowerCase()}.${lastName.toLowerCase()}@servicehub.com</p>
+                    <p><strong>Phone:</strong> +91 ${Math.floor(Math.random() * 9000000000) + 1000000000}</p>
+                    <p><strong>Work Price:</strong> ₹${workPrice} - ₹${workPrice + 500}</p>
+                    <a href="thankyou.html">
+                    <button class="book-btn" onclick="bookService('${firstName} ${lastName}', '${category}')">Book Service</button>
+                    </a>
+                `;
+
+                providersContainer.appendChild(providerCard);
+            }
+        }
+
+        function bookService(name, category) {
+            const confirmed = confirm(`Do you want to book a service with ${name} for ${category}?`);
+            if (confirmed) {
+                alert(`Booking confirmed with ${name}. Our team will contact you shortly.`);
+            }
+        }
+
+        // Add category filter functionality
+        document.getElementById('category-filter').addEventListener('change', function() {
+            const selectedCategory = this.value;
+            const providerCards = document.querySelectorAll('.provider-card');
+            
+            providerCards.forEach(card => {
+                if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // Generate providers on page load
+        generateProviders();
+    </script>
+</body>
+</html>
